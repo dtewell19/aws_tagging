@@ -20,7 +20,7 @@ from notification import send_violation_email, send_remediation_email
 logging.basicConfig(level=logging.INFO)
 
 # Specify desired resource types to validate
-APPLICABLE_RESOURCES = ["AWS::EC2::Instance"] 
+APPLICABLE_RESOURCES = ["AWS::EC2::Instance"]
 
 
 # Iterate through required tags ensureing each required tag is present,
@@ -54,8 +54,8 @@ def find_violation(current_tags, required_tags, configuration_item):
                 str(rtag) + " is not present."
 
     if violation == "":
-        return None
         logging.warn("No violation found.")
+        return None
 
     else:
         logging.warn(violation)
