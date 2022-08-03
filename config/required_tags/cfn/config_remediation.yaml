@@ -2,6 +2,17 @@ Parameters:
   PrincipalOrgID:
     Type: String
     Default: o-123456789
+  FunctionS3BucketName:
+    Type: String
+    Default: config-tag-remediation
+    Description: S3 bucket name of function source code location.
+  FunctionS3ObjectName:
+    Type: String
+    Default: lambda.zip
+    Description: Object name of function source code zip file from  S3 bucket.
+  FunctionLogLevel:
+    Type: String
+    Default: INFO
 Resources:
   configtagremediationrole439257A4:
     Type: AWS::IAM::Role
@@ -56,8 +67,8 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Code:
-        S3Bucket: config-tag-remediation
-        S3Key: lambda.zip
+        S3Bucket: !Ref FunctionS3BucketName
+        S3Key: !Ref FunctionS3ObjectName
       Role:
         Fn::GetAtt:
           - configtagremediationrole439257A4
@@ -69,7 +80,7 @@ Resources:
       Timeout: 900
       Environment:
         Variables: 
-          LOG_LEVEL : INFO
+          LOG_LEVEL : !Ref FunctionLogLevel
     DependsOn:
       - configtagremediationrole439257A4
   configtagremediationlambdaPermission0A9103DB:

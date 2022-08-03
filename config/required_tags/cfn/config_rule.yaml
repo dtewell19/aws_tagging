@@ -24,8 +24,7 @@ Resources:
         K-test1: V-test1
         K-test2: V-test2
         K-test3: V-test3
-        exec_role:
-          Ref: configtagremediationrole439257A4
+        exec_role: !GetAtt configtagremediationrole439257A4.Arn
       Scope:
         ComplianceResourceTypes:
           - AWS::EC2::Instance
