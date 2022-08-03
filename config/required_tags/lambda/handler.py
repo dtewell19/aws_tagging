@@ -18,7 +18,8 @@ logging.getLogger().setLevel(os.environ['LOG_LEVEL'])
 # Specify desired resource types to validate
 # full list of taggable resources: https://docs.aws.amazon.com/ARG/latest/userguide/supported-resources.html
 # resource names follow cfn syntax: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html
-APPLICABLE_RESOURCES = ["AWS::EC2::Instance", "AWS::EC2::Volume"]
+APPLICABLE_RESOURCES = ["AWS::EC2::Instance", "AWS::EC2::Volume", "AWS::S3::Bucket", "AWS::DynamoDB::Table", "AWS::DynamoDB::GlobalTable", "AWS::RDS::DBCluster",
+                        "AWS::RDS::DBInstance", "AWS::EFS::FileSystem", "AWS::FSx::FileSystem", "AWS::DocDB::DBCluster", "AWS::DocDB::DBInstance", "AWS::Neptune::DBCluster", "AWS::Neptune::DBInstance"]
 
 
 # Iterate through required tags ensureing each required tag is present,

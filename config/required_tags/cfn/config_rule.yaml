@@ -28,7 +28,7 @@ Resources:
           Ref: configtagremediationrole439257A4
       Scope:
         ComplianceResourceTypes:
-          - AWS::EC2::Instance
+          - AWS::EC2::Instance, AWS::EC2::Volume, AWS::S3::Bucket, AWS::DynamoDB::Table, AWS::DynamoDB::GlobalTable, AWS::RDS::DBCluster, AWS::RDS::DBInstance, AWS::EFS::FileSystem, AWS::FSx::FileSystem, AWS::DocDB::DBCluster, AWS::DocDB::DBInstance, AWS::Neptune::DBCluster, AWS::Neptune::DBInstance
   configtagremediationrole439257A4:
     Type: AWS::IAM::Role
     Properties:
