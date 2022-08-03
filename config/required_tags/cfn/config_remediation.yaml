@@ -1,0 +1,83 @@
+Parameters:
+  PrincipalOrgID:
+    Type: String
+    Default: o-123456789
+Resources:
+  configtagremediationrole439257A4:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      Description: IAM Role for use by Lambda for Config detection and remediation
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSConfigRole
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/ResourceGroupsandTagEditorFullAccess
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSConfigRulesExecutionRole
+      RoleName: configRemediationLambdaRole
+  crossaccountpolicy3EC384D0:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Condition:
+              ForAnyValue:StringLike:
+                aws:PrincipalOrgID:
+                  Ref: PrincipalOrgID
+            Effect: Allow
+            Resource: arn:aws:iam::*:role/configRemediationLambdaRole
+        Version: "2012-10-17"
+      PolicyName: crossaccountpolicy3EC384D0
+      Roles:
+        - Ref: configtagremediationrole439257A4
+  configtagremediationlambda2921F346:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: config-tag-remediation
+        S3Key: lambda.zip
+      Role:
+        Fn::GetAtt:
+          - configtagremediationrole439257A4
+          - Arn
+      Description: Custom Lambda for use with AWS Config to determine required tag conpliance and automating redemiation.
+      FunctionName: config_tag_remediation
+      Handler: handler.lambda_handler
+      Runtime: python3.9
+      Timeout: 900
+      Environment:
+        Variables: 
+          LOG_LEVEL : INFO
+    DependsOn:
+      - configtagremediationrole439257A4
+  configtagremediationlambdaPermission0A9103DB:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - configtagremediationlambda2921F346
+          - Arn
+      Principal: config.amazonaws.com
