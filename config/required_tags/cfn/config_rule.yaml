@@ -59,8 +59,15 @@ Resources:
       PolicyDocument:
         Statement:
           - Action:
-              - ec2:*Tags*
-              - ec2:DeleteTags
+              - ec2:*Tag*
+              - rds:*Tag*
+              - s3:*Tag*
+              - dynamodb:*tag*
+              - dynamodb:*Tag*
+              - elasticfilesystem:*tag*
+              - elasticfilesystem:*Tag*
+              - fsx:*tag*
+              - fsx:*Tag*
             Effect: Allow
             Resource: "*"
         Version: "2012-10-17"
