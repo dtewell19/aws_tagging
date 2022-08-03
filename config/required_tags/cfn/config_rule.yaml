@@ -71,15 +71,12 @@ Resources:
       PolicyDocument:
         Statement:
           - Action:
-              - ec2:*Tag*
-              - rds:*Tag*
-              - s3:*Tag*
+              - ec2:*tag*
+              - rds:*tag*
+              - s3:*tag*
               - dynamodb:*tag*
-              - dynamodb:*Tag*
               - elasticfilesystem:*tag*
-              - elasticfilesystem:*Tag*
               - fsx:*tag*
-              - fsx:*Tag*
             Effect: Allow
             Resource: "*"
         Version: "2012-10-17"
