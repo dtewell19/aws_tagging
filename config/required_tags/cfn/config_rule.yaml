@@ -1,0 +1,69 @@
+Parameters:
+  ManagementAccountRole:
+    Type: String
+    Default: arn:aws:iam::123456789:role/configRemediationLambdaRole
+  ManagementAccountFunction:
+    Type: String
+    Default: arn:aws:lambda:us-east-1:123456789:function:config_tag_remediation
+Resources:
+  configtagremediationrule642D1C3D:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      Source:
+        Owner: CUSTOM_LAMBDA
+        SourceDetails:
+          - EventSource: aws.config
+            MessageType: ConfigurationItemChangeNotification
+          - EventSource: aws.config
+            MessageType: OversizedConfigurationItemChangeNotification
+        SourceIdentifier:
+          Ref: ManagementAccountFunction
+      ConfigRuleName: required_tag_remediation
+      Description: Custom Config Rule for determining required tag conpliance and automating redemiation.
+      InputParameters:
+        K-test1: V-test1
+        K-test2: V-test2
+        K-test3: V-test3
+        exec_role:
+          Ref: configtagremediationrole439257A4
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::EC2::Instance
+  configtagremediationrole439257A4:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              AWS:
+                  Ref: ManagementAccountRole
+        Version: "2012-10-17"
+      Description: IAM Role for use by Lambda for Config detection and remediation
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSConfigRole
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/ResourceGroupsandTagEditorFullAccess
+      RoleName: configRemediationLambdaRole
+  configtagremediationroleDefaultPolicy759DDD44:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ec2:*Tags*
+              - ec2:DeleteTags
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: configtagremediationroleDefaultPolicy759DDD44
+      Roles:
+        - Ref: configtagremediationrole439257A4
