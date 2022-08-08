@@ -77,7 +77,7 @@ Resources:
     Condition: CreateResources
     Properties:
       FunctionName: !Ref 'CFAutoTag'
-      FunctionVersion: !GetAtt 'StableVersion.Version'
+      FunctionVersion: $LATEST
       Name: PROD
   PermissionForEventsToInvokeLambda:
     Type: AWS::Lambda::Permission
