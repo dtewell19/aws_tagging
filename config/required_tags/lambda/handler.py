@@ -166,7 +166,7 @@ def main():
         "configRuleArn": "arn:aws:config:us-east-1:983960904967:config-rule/config-rule-cr3nbj",
         "configRuleName": "required_tag_remediation",
         "configRuleId": "config-rule-cr3nbj",
-        "accountId": "983960904967"
+        "accountId": "1234567890"
     }
 
     context = {}
